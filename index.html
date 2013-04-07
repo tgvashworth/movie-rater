@@ -3,12 +3,37 @@
 <title>Move Rater</title>
 
 <link rel="stylesheet" href="Autocomplete.css">
+<style type="text/css">
+  .new {
+    background: #FFFBCC;
+  }
+</style>
 
 <div class="new-movie">
   <input name="new-movie-name" id="new-movie-name">
 </div>
 
+<div class="rate">
+  <div id="movie-a">
+    <!-- Movie injected here -->
+  </div>
+  <div id="movie-b">
+    <!-- Movie injected here -->
+  </div>
+</div>
+
+<ol id="ranked"></ol>
+
+<script type="text/template" id="template-movie">
+  <a href="#">
+    <h1><%= title %></h1>
+    <img src="<%= poster %>">
+  </a>
+</script>
+
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 <script src="Autocomplete.js"></script>
+<script src="utilities.js"></script>
 <script src="rotten.js"></script>
 <script src="movie.js"></script>

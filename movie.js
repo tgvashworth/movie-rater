@@ -4,43 +4,96 @@ $(function () {
   // Cached elements
   // ==================================
 
-  var $newMovieName = $('#new-movie-name');
+  var $newMovieName = $('#new-movie-name'),
+      $movieA = $('#movie-a'),
+      $movieB = $('#movie-b'),
+      $ranked = $('#ranked');
 
   // ==================================
-  // Utilities
+  // Cached templates
   // ==================================
 
-  // Debouce a callback
-  var debounce = (function () {
-    // Save the previously used callbacks and timers
-    var cbs = [],
-        timers = [];
+  var template = {
+    movie: _.template($('#template-movie').html())
+  };
 
-    // When debounce is called, they're calling this function
-    return function (delay, cb) {
-      // Find or store this callback
-      var cbIndex = cbs.indexOf(cb);
-      if (cbIndex === -1) {
-        cbIndex = cbs.push(cb);
-      }
+  // ==================================
+  // Storage
+  // ==================================
 
-      // When the event fires, this function is called
-      return function () {
-        // Save the arguments
-        var args = [].slice.call(arguments);
-        // Clear any current timers and start a new one
-        clearTimeout(timers[cbIndex]);
-        timers[cbIndex] = setTimeout(function () {
-          cb.apply(this, args);
-        }.bind(this), delay);
-      };
-    };
-  }());
+  var getMovies = function () {
+    return JSON.parse(localStorage.getItem('movies') || '[]');
+  };
+
+  var saveMovies = function (movies) {
+    return localStorage.setItem('movies', JSON.stringify(movies));
+  };
+
+  // ==================================
+  // States
+  // ==================================
+
+  // Show two movies and set up event handlers for picking
+  var compareMovies = function (movieA, movieB, cb) {
+    $movieA.html(template.movie({
+      title: movieA.title,
+      poster: movieA.posters.profile
+    }));
+    $movieB.html(template.movie({
+      title: movieB.title,
+      poster: movieB.posters.profile
+    }));
+    $movieA.find('a').click(function (e) {
+      e.preventDefault();
+      cb(false);
+    });
+    $movieB.find('a').click(function (e) {
+      e.preventDefault();
+      cb(true);
+    });
+  };
+
+  // Show movies in ranked order
+  var displayRanked = function (movies, newMovie) {
+    newMovie = newMovie || { title: false };
+    $ranked.html('');
+    movies.forEach(function (movie) {
+      $ranked.prepend($('<li>', {
+        text: movie.title,
+        className: (movie.title === newMovie.title ? 'new' : '')
+      }));
+    });
+  };
+
+  // Begin rating the selected movie
+  var rateMovie = function (newMovie) {
+    $ranked.html('');
+    var oldMovies = getMovies();
+
+    insert(newMovie, oldMovies, compareMovies, function (movies) {
+      $movieA.html('');
+      $movieB.html('');
+      displayRanked(movies, newMovie);
+      $newMovieName.val('').focus();
+      saveMovies(movies);
+    });
+
+  };
+
+  // Movie chosen. Grab its info and begin rating!
+  var pickMovie = function (title) {
+    rotten.search(title, function (movies) {
+      movies = movies || [{title: 'Not found.'}];
+      var movie = movies[0];
+      rateMovie(movie);
+    });
+  };
 
   // ==================================
   // Event handlers
   // ==================================
 
+  // Search
   var debouncedSearch = debounce(100, function (newValue) {
     var autocomplete = this;
     rotten.search(newValue, function (movies) {
@@ -62,5 +115,18 @@ $(function () {
     srcData : [],
     onInput : debouncedSearch
   });
+
+  // Pick movie from list
+  $newMovieName.on('keypress', function (e) {
+    if(e.which == 13) {
+      pickMovie($newMovieName.val());
+    }
+  });
+
+  // ==================================
+  // Load
+  // ==================================
+
+  displayRanked(getMovies());
 
 });
