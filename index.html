@@ -187,19 +187,8 @@
     </div>
     <h2>Your top movies</h2>
     <div class='content'>
-      <div class='ranking'>
-        <div class='movie' style="background: url('http://content6.flixster.com/movie/11/16/75/11167576_ori.jpg') no-repeat center center; background-size: 100%"></div>
-        <div class='movie' style="background: url('http://content6.flixster.com/movie/10/84/19/10841916_ori.jpg') no-repeat center center; background-size: 100%"></div>
-        <div class='movie' style="background: url('http://content6.flixster.com/movie/11/13/43/11134356_ori.jpg') no-repeat center center; background-size: 100%"></div>
-        <div class='movie' style="background: url('http://content7.flixster.com/movie/32/05/57/3205577_ori.jpg') no-repeat center center; background-size: 100%"></div>
-        <div class='movie' style="background: url('http://content6.flixster.com/movie/11/16/63/11166320_ori.jpg') no-repeat center center; background-size: 100%"></div>
-        <div class='movie selected' style="background: url('http://content9.flixster.com/movie/10/92/76/10927695_ori.jpg') no-repeat center center; background-size: 100%"></div>
-        <div class='description'>
-          <h2>Napolean Dynamite</h2>
-          <small>Duration: 95</small>
-        </div>
-        <div class='movie' style="background: url('http://content9.flixster.com/movie/25/06/250691_ori.jpg') no-repeat center center; background-size: 100%"></div>
-        <div class='movie' style="background: url('http://content7.flixster.com/movie/10/88/40/10884041_ori.jpg') no-repeat center center; background-size: 100%"></div>
+      <div class='ranking' id='ranked'>
+      
       </div>
     </div>
     <footer>
@@ -217,6 +206,9 @@
       <small><a href="<%=link%>">See More</a></small>
     </div>
   </a>
+</script>
+<script type="text/template" id="template-movie-ranking">
+  <div class='movie' style="background: url('<%= poster %>') no-repeat center center; background-size: 100%"></div>
 </script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>

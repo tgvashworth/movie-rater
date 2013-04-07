@@ -14,7 +14,8 @@ $(function () {
   // ==================================
 
   var template = {
-    movie: _.template($('#template-movie').html())
+    movie: _.template($('#template-movie').html()),
+    movieRanking: _.template($('#template-movie-ranking').html())
   };
 
   // ==================================
@@ -62,16 +63,16 @@ $(function () {
     newMovie = newMovie || { title: false };
     $ranked.html('');
     movies.forEach(function (movie) {
-      $ranked.prepend($('<li>', {
-        text: movie.title,
-        className: (movie.title === newMovie.title ? 'new' : '')
+      $ranked.prepend(template.movieRanking({
+        poster: movie.posters.original
       }));
     });
   };
 
   // Begin rating the selected movie
   var rateMovie = function (newMovie) {
-    $ranked.html('');
+
+    $('.ring').removeClass('hide');
     var oldMovies = getMovies();
 
     oldMovies = oldMovies.filter(function (movie) {
@@ -79,6 +80,7 @@ $(function () {
     });
 
     insert(newMovie, oldMovies, compareMovies, function (movies) {
+      $('.ring').addClass('hide');
       $movieA.html('');
       $movieB.html('');
       displayRanked(movies, newMovie);
