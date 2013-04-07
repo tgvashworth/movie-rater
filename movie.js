@@ -37,11 +37,15 @@ $(function () {
   var compareMovies = function (movieA, movieB, cb) {
     $movieA.html(template.movie({
       title: movieA.title,
-      poster: movieA.posters.profile
+      link: movieA.links.alternate,
+      year: movieA.year,
+      poster: movieA.posters.original
     }));
     $movieB.html(template.movie({
       title: movieB.title,
-      poster: movieB.posters.profile
+      link: movieB.links.alternate,
+      year: movieB.year,
+      poster: movieB.posters.original
     }));
     $movieA.find('a').click(function (e) {
       e.preventDefault();

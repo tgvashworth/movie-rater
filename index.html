@@ -1,39 +1,227 @@
-<!doctype html>
-<meta charset="utf-8">
-<title>Move Rater</title>
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<meta name="viewport" content="width=device-width">
+<title>Rater</title>
 <link rel="stylesheet" href="Autocomplete.css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <style type="text/css">
-  .new {
-    background: #FFFBCC;
+  * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
+  h1, h2, h3 {
+    font-weight: normal;
   }
+
+  body {
+    text-align: center;
+    font-size: 1em;
+    color: hsl(0, 100%, 100%);
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    background: url('bg.png') no-repeat fixed center bottom #000;
+    background-position: 50% 100%;
+    background-size: 100%;
+    border-top: 0.5em solid hsl(0, 80%, 60%);
+    text-shadow: 0 1px 3px rgba(200, 200, 200, 0.3);
+    -moz-text-shadow: 0 1px 3px rgba(200, 200, 200, 0.3);
+    -webkit-text-shadow: 0 1px 3px rgba(200, 200, 200, 0.3);
+  }
+
+  input {
+    font-size: 1.4em;
+    font-family: 'Open Sans';
+    border: 1px double #DDD;
+    border-radius: 6px;
+    box-shadow: 0 0 5px hsl(0, 80%, 90%);
+    color: #555;
+    padding: 0.3125em;
+    width: 300px;
+    outline: none;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .content {
+    padding: 0.625em;
+    background-color: hsla(0, 0%, 0%, 0.5);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .brand {
+    font-size: 3em;
+  }
+
+  .battle {
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .ring {
+    overflow: hidden;
+    padding: 0.625em;
+  }
+
+  .pug {
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    border: 1.25em solid hsla(0, 50%, 90%, 0.6);
+    max-width: 45%;
+    margin: 0;
+    -webkit-opacity: 0.8;
+    -khtml-opacity: 0.8;
+    -moz-opacity: 0.8;
+    opacity: 0.8;
+  }
+
+  .pug a {
+    color: white;
+  }
+
+  .movie:hover, .pug:hover, .selected {
+    -webkit-opacity: 1;
+    -khtml-opacity: 1;
+    -moz-opacity: 1;
+    opacity: 1;
+    -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 1);
+    box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 1);
+  }
+
+  .poster {
+    display: block;
+    width: 100%;
+  }
+
+  .info {
+    width: 100%;
+    display: block;
+    background-color: hsla(0, 0%, 0%, 0.65);
+    position: absolute;
+    bottom: 0px;
+    text-align: left;
+    padding: 0.625em;
+  }
+
+  .info p, .info small {
+    margin: 0 0 0.3125em 0;
+  }
+
+  .ranking {
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  .movie {
+    float:left;
+    cursor: pointer;
+    height: 0;
+    width: 16.666666667%;
+    padding-bottom: 22.666666667%;
+    display: block;
+    -webkit-opacity: 0.8;
+    -khtml-opacity: 0.8;
+    -moz-opacity: 0.8;
+    opacity: 0.8;
+    background-position: 50px;
+  }
+
+  .description {
+    text-align: left;
+    padding: 1.25em;
+    width: 100%;
+    background-color: #222;
+    display: block;
+    float: left;
+    -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 1);
+            box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 1);
+  }
+
+  footer {
+    padding: 2.5em;
+  }
+
 </style>
-
-<div class="new-movie">
-  <input name="new-movie-name" id="new-movie-name">
-</div>
-
-<div class="rate">
-  <div id="movie-a">
-    <!-- Movie injected here -->
+</head>
+<body>
+  <div class='app'>
+    <div class='content'>
+      <header>
+        <h1 class='brand'>Rater&hearts;</h1>
+        <p>Rate <em><strong>'your'</strong></em> favorite movies.</p>
+        <small>Select a movie below.</small>
+        <br>
+        <br>
+      </header>
+      <div class='search'>
+        <div class="new-movie">
+          <input name="new-movie-name" id="new-movie-name" list="movies" placeholder="Toy Story 3"/>
+        </div>
+      </div>
+    </div>
+    <div class='ring hide'>
+      <h2>Which is better?</h2>
+      <div class='battle'>
+        <div class='pug left' id='movie-a'>
+        </div>
+        <div class='pug right' id='movie-b'>
+        </div>
+      </div>
+      <br>
+      <small>Hint: You can press Left or Right arrow keys on your keyboard, not like facemash at all.</small>
+    </div>
+    <h2>Your top movies</h2>
+    <div class='content'>
+      <div class='ranking'>
+        <div class='movie' style="background: url('http://content6.flixster.com/movie/11/16/75/11167576_ori.jpg') no-repeat center center; background-size: 100%"></div>
+        <div class='movie' style="background: url('http://content6.flixster.com/movie/10/84/19/10841916_ori.jpg') no-repeat center center; background-size: 100%"></div>
+        <div class='movie' style="background: url('http://content6.flixster.com/movie/11/13/43/11134356_ori.jpg') no-repeat center center; background-size: 100%"></div>
+        <div class='movie' style="background: url('http://content7.flixster.com/movie/32/05/57/3205577_ori.jpg') no-repeat center center; background-size: 100%"></div>
+        <div class='movie' style="background: url('http://content6.flixster.com/movie/11/16/63/11166320_ori.jpg') no-repeat center center; background-size: 100%"></div>
+        <div class='movie selected' style="background: url('http://content9.flixster.com/movie/10/92/76/10927695_ori.jpg') no-repeat center center; background-size: 100%"></div>
+        <div class='description'>
+          <h2>Napolean Dynamite</h2>
+          <small>Duration: 95</small>
+        </div>
+        <div class='movie' style="background: url('http://content9.flixster.com/movie/25/06/250691_ori.jpg') no-repeat center center; background-size: 100%"></div>
+        <div class='movie' style="background: url('http://content7.flixster.com/movie/10/88/40/10884041_ori.jpg') no-repeat center center; background-size: 100%"></div>
+      </div>
+    </div>
+    <footer>
+      <p>Rater&hearts; &copy;</p>
+      <small>here's some bullshit just to fill space</small>
+      <address>Developed using rottentomatoes api</address>
+    </footer>
   </div>
-  <div id="movie-b">
-    <!-- Movie injected here -->
-  </div>
-</div>
-
-<ol id="ranked"></ol>
-
+</body>
 <script type="text/template" id="template-movie">
-  <a href="#">
-    <h1><%= title %></h1>
-    <img src="<%= poster %>">
+  <a href='#'>
+    <img class='poster' src="<%= poster %>">
+    <div class='info'>
+      <p><%= title %>, <%= year %></p>
+      <small><a href="<%=link%>">See More</a></small>
+    </div>
   </a>
 </script>
-
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 <script src="Autocomplete.js"></script>
 <script src="utilities.js"></script>
 <script src="rotten.js"></script>
 <script src="movie.js"></script>
+</html>
