@@ -4,8 +4,7 @@ $(function () {
   // Cached elements
   // ==================================
 
-  var $newMovieName = $('.new-movie-name'),
-      $movieList = $('#movie-list');
+  var $newMovieName = $('#new-movie-name');
 
   // ==================================
   // Utilities
@@ -42,8 +41,14 @@ $(function () {
   // Event handlers
   // ==================================
 
-  var debouncedSearch = debounce(200, function () {
-    console.log('searching');
+  var debouncedSearch = debounce(100, function (newValue) {
+    var autocomplete = this;
+    rotten.search(newValue, function (movies) {
+      movies = movies || [{title: 'None found.'}];
+      autocomplete.addValues(movies.map(function (movie) {
+        return movie.title;
+      }));
+    });
   });
 
   // ==================================
@@ -51,6 +56,11 @@ $(function () {
   // ==================================
 
   // Search for the movie
-  $newMovieName.on('keyup', debouncedSearch);
+  new Autocomplete("new-movie-name", {
+    srcType : "array",
+    useNativeInterface: false,
+    srcData : [],
+    onInput : debouncedSearch
+  });
 
 });
