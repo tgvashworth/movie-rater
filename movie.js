@@ -70,6 +70,10 @@ $(function () {
     $ranked.html('');
     var oldMovies = getMovies();
 
+    oldMovies = oldMovies.filter(function (movie) {
+      return movie.title !== newMovie.title;
+    });
+
     insert(newMovie, oldMovies, compareMovies, function (movies) {
       $movieA.html('');
       $movieB.html('');
@@ -82,10 +86,14 @@ $(function () {
 
   // Movie chosen. Grab its info and begin rating!
   var pickMovie = function (title) {
+    console.log("Searching for " + title);
     rotten.search(title, function (movies) {
       movies = movies || [{title: 'Not found.'}];
-      var movie = movies[0];
-      rateMovie(movie);
+      movies.forEach(function (movie) {
+        if (movie.title === title) {
+          rateMovie(movie);
+        }
+      });
     });
   };
 
