@@ -40,6 +40,7 @@ $(function () {
 	var compareMovies = function (movieA, movieB, cb) {
 		$movieA.html(template.movie({
 			title: movieA.title,
+			id: movieA.id,
 			link: movieA.links.alternate,
 			year: movieA.year,
 			poster: movieA.posters.original
@@ -47,6 +48,7 @@ $(function () {
 
 		$movieB.html(template.movie({
 			title: movieB.title,
+			id: movieB.id,
 			link: movieB.links.alternate,
 			year: movieB.year,
 			poster: movieB.posters.original
@@ -76,15 +78,30 @@ $(function () {
 	};
 
 	// Show movies in ranked order
-	var displayRanked = function (movies, newMovie) {
-		isEmpty();
-		newMovie = newMovie || { title: false };
+	var displayRanked = function (movies) {
+		autoHide();
+
 		$ranked.html('');
 		movies.forEach(function (movie) {
 			$ranked.prepend(template.movieRanking({
-				poster: movie.posters.original
+				poster: movie.posters.original,
+				id: movie.id,
+				link: movie.links.alternate
 			}));
 		});
+	};
+
+	// Is empty
+	var autoHide = function() {
+		var movies = getMovies();
+		if (movies.length == 0) {
+			console.log('0');
+			$('.ranking').parent().addClass('hide');
+			return true;
+		} else {
+			$('.ranking').parent().removeClass('hide');
+			return false;
+		}
 	};
 
 	// Begin rating the selected movie
@@ -104,7 +121,7 @@ $(function () {
 			displayRanked(movies, newMovie);
 			$newMovieName.val('').focus();
 			saveMovies(movies);
-			isEmpty();
+			autoHide();
 		});
 	};
 
@@ -119,6 +136,20 @@ $(function () {
 				}
 			});
 		});
+	};
+
+	var removeMovie = function (id) {
+		var movies = getMovies();
+
+		$.each(movies, function (index, value) {
+			// console.log(value.id);
+			if (value.id == id) {
+				movies.splice(index, 1);
+			};
+		});
+
+		// console.log(movies);
+		return movies;
 	};
 
 	// ==================================
@@ -155,6 +186,14 @@ $(function () {
 		}
 	});
 
+	$('.ranking').on('click', '.remove', function (e) {
+		e.preventDefault();
+		if (!confirm("Are you sure you want to delete it?")) return;
+		var movies = removeMovie($(this).attr('data-movieid'));
+		saveMovies(movies);
+		displayRanked(movies);
+	});
+
 	$(document).keydown(function () {
 		shortcut.apply(this, [].slice.call(arguments));
 	});
@@ -164,19 +203,8 @@ $(function () {
 	// ==================================
 
 	// Check if favourites list is stored.
-	var isEmpty = function() {
-		var movies = getMovies();
-		if (movies.length == 0) {
-			console.log('0');
-			$('.ranking').parent().addClass('hide');
-			return true;
-		} else {
-			$('.ranking').parent().removeClass('hide');
-			return false;
-		}
-	};
 
 	displayRanked(getMovies());
-	isEmpty();
+	autoHide();
 
 });

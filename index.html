@@ -133,7 +133,8 @@
 
 
   .movie {
-    float:left;
+    position: relative;
+    float: left;
     cursor: pointer;
     height: 0;
     width: 16.666666667%;
@@ -144,6 +145,23 @@
     -moz-opacity: 0.8;
     opacity: 0.8;
     background-position: 50px;
+  }
+
+  .movie:hover > .remove {
+    display: block;
+  }
+
+  .remove {
+    z-index: 1000;
+    overflow: visible;
+    display: none;
+    position: absolute;
+    font-style: normal;
+    top: 5px;
+    right: 5px;
+    padding: 0.2em 0.7em;
+    background: hsl(0, 100%, 63%);
+    text-decoration: none;
   }
 
   .description {
@@ -215,7 +233,7 @@
   </a>
 </script>
 <script type="text/template" id="template-movie-ranking">
-  <div class='movie' style="background: url('<%= poster %>') no-repeat center center; background-size: 100%"></div>
+  <a href='<%= link %>' target='_blank'><div class='movie' style="background: url('<%= poster %>') no-repeat center center; background-size: 100%"><a href='#' class='remove' data-movieid='<%= id %>'>x</a></div></a>
 </script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.0.8/es5-shim.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
