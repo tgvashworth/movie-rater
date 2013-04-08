@@ -107,6 +107,7 @@ $(function () {
 	// Begin rating the selected movie
 	var rateMovie = function (newMovie) {
 		$('.ring').removeClass('hide');
+		$('.search').addClass('hide');
 		var oldMovies = getMovies();
 
 		oldMovies = oldMovies.filter(function (movie) {
@@ -116,6 +117,7 @@ $(function () {
 		insert(newMovie, oldMovies, compareMovies, function (movies) {
 			shortcut = function () {};
 			$('.ring').addClass('hide');
+			$('.search').removeClass('hide');
 			$movieA.html('');
 			$movieB.html('');
 			displayRanked(movies, newMovie);
@@ -141,11 +143,8 @@ $(function () {
 	var removeMovie = function (id) {
 		var movies = getMovies();
 
-		$.each(movies, function (index, value) {
-			// console.log(value.id);
-			if (value.id == id) {
-				movies.splice(index, 1);
-			};
+		movies = movies.filter(function (movie) {
+			return movie.id !== id;
 		});
 
 		// console.log(movies);
