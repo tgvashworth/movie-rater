@@ -71,7 +71,7 @@ $(function () {
 	    }
 
 	    if (e.keyCode == 39) {
-	    	cb(true);
+    		cb(true);
 	    }
 		};
 	
